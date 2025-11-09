@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>柚子软件库 - 专业的软件技术交流平台</title>
+    <meta
+      name="description"
+      content="柚子软件库专注于软件技术交流与学习，提供技术讨论、逆向工程研究、安全分析等专业内容。拥有丰富的应用资源，包括AE工程模板、工具软件等，仅供学习研究使用。"
+    />
+    <meta
+      name="keywords"
+      content="柚子软件库,软件下载,应用商店,AE工程,技术交流,软件学习,逆向工程,安全分析,工具软件,开发资源"
+    />
+    <meta name="author" content="柚子软件库" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <link
+      rel="icon"
+      href="https://img.youz.space/i/09/12rmafv.png"
+      type="image/png"
+    />
+    <link rel="canonical" href="https://store.youz.space" />
+    <meta property="og:title" content="柚子软件库" />
+    <meta
+      property="og:description"
+      content="柚子软件库专注于软件技术交流与学习，提供专业的技术研究内容。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://store.youz.space" />
+    <meta
+      property="og:image"
+      content="https://img.youz.space/i/09/12rmafv.png"
+    />
+    <meta property="og:site_name" content="柚子软件库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="柚子软件库" />
+    <meta
+      name="twitter:description"
+      content="柚子软件库专注于软件技术交流与学习，提供专业的技术研究内容。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://img.youz.space/i/09/12rmafv.png"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <h1>柚子软件库</h1>
+          </div>
+
+          <!-- 搜索框 -->
+          <div class="search-container">
+            <div class="search-box">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="搜索应用..."
+                class="search-input"
+              />
+              <button class="search-btn" id="searchBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 桌面端导航 -->
+          <nav class="desktop-nav">
+            <a href="#" class="nav-link active">首页</a>
+            <a href="#" class="nav-link">分类</a>
+            <a href="https://youz.space" class="nav-link">Github</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+      <div class="container">
+        <!-- 英雄区域 -->
+        <section class="hero-section">
+          <div class="hero-content">
+            <h2 class="hero-title">柚子软件库</h2>
+            <p class="hero-subtitle">内容来源于网络，仅供学习研究使用</p>
+
+          </div>
+        </section>
+
+        <!-- 应用分类 -->
+        <section class="category-section">
+          <div class="section-header">
+            <h3 class="section-title">Typed</h3>
+          </div>
+          <div class="category-grid" id="categoryGrid">
+            <!-- 分类将通过JavaScript动态生成 -->
+          </div>
+        </section>
+
+        <!-- 应用列表 -->
+        <section class="apps-section">
+          <div class="section-header">
+            <h3 class="section-title">Apps</h3>
+          </div>
+          <div class="apps-grid" id="appsGrid">
+            <!-- 应用列表将通过JavaScript动态生成 -->
+          </div>
+          <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">加载更多</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 底部导航栏（移动端） -->
+    <footer class="mobile-footer">
+      <nav class="footer-nav">
+        <a href="#" class="footer-nav-item active">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20V14H14V20H19V12H22L12 3L2 12H5V20H10Z" />
+          </svg>
+          <span>首页</span>
+        </a>
+        <a href="#" class="footer-nav-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z"
+            />
+            <path d="M7 12H9V17H7V12ZM11 7H13V17H11V7ZM15 10H17V17H15V10Z" />
+          </svg>
+          <span>免责声明</span>
+        </a>
+
+        <a href="#" class="footer-nav-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"
+            />
+          </svg>
+          <span>Github</span>
+        </a>
+      </nav>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
