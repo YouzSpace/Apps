@@ -253,6 +253,16 @@ class AppStore {
     inferCategory(appName, subtitle) {
         const combinedText = (appName + ' ' + (subtitle || '')).toLowerCase();
         
+        // XP模块相关关键词
+        const xpKeywords = ['xp', 'xposed', 'edxposed', 'lsposed', '模块', 'module', 'hook', '框架', '激活', '破解'];
+        
+        // 检查是否包含XP相关关键词
+        for (const keyword of xpKeywords) {
+            if (combinedText.includes(keyword)) {
+                return 'XP模块';
+            }
+        }
+        
         // AE工程相关关键词
         const aeKeywords = ['ae', 'after effects', 'aftereffects', '特效', '模板', '工程', '脚本', '插件'];
         
@@ -270,18 +280,7 @@ class AppStore {
     // 推断开发者
     inferDeveloper(appName) {
         const developerMap = {
-            '微信': '腾讯科技',
-            '支付宝': '蚂蚁集团',
-            '抖音': '字节跳动',
-            '淘宝': '阿里巴巴',
-            '高德': '阿里巴巴',
-            '网易云': '网易',
-            '美团': '美团',
-            '百度': '百度',
-            'QQ': '腾讯科技',
-            '京东': '京东',
-            '滴滴': '滴滴出行',
-            '快手': '快手科技'
+            
         };
 
         for (const [key, value] of Object.entries(developerMap)) {
@@ -358,14 +357,16 @@ class AppStore {
         this.renderApps();
     }
 
-    // 渲染分类 - 显示全部和AE工程分类
+    // 渲染分类 - 显示全部、AE工程和XP模块分类
     renderCategories() {
-        // 统计AE工程分类的应用数量
+        // 统计各分类的应用数量
         const aeCount = this.appsData.filter(app => app.category === 'AE工程').length;
+        const xpCount = this.appsData.filter(app => app.category === 'XP模块').length;
 
         const categories = [
             { id: 'all', name: '全部', icon: '📱', count: this.appsData.length },
-            { id: 'ae', name: 'AE工程', icon: '🎬', count: aeCount }
+            { id: 'ae', name: 'AE工程', icon: '🎬', count: aeCount },
+            { id: 'xp', name: 'XP模块', icon: '⚡', count: xpCount }
         ];
 
         const categoryGrid = document.getElementById('categoryGrid');
@@ -418,11 +419,14 @@ class AppStore {
         } else if (this.currentCategory === 'ae') {
             // 筛选AE工程分类的应用
             this.filteredApps = this.appsData.filter(app => app.category === 'AE工程');
+        } else if (this.currentCategory === 'xp') {
+            // 筛选XP模块分类的应用
+            this.filteredApps = this.appsData.filter(app => app.category === 'XP模块');
         } else {
             this.filteredApps = [...this.appsData];
         }
         
-        console.log(`AE工程分类筛选结果: ${this.filteredApps.length} 个应用，已加载AE应用总数: ${this.appsData.filter(app => app.category === 'AE工程').length}`);
+        console.log(`分类筛选结果: ${this.filteredApps.length} 个应用，AE工程: ${this.appsData.filter(app => app.category === 'AE工程').length}，XP模块: ${this.appsData.filter(app => app.category === 'XP模块').length}`);
         
         // 渲染应用
         this.renderApps();
@@ -495,7 +499,7 @@ class AppStore {
         const appsGrid = document.getElementById('appsGrid');
         if (!appsGrid) return;
         
-        // 如果是AE工程分类，需要特殊处理
+        // 如果是AE工程或XP模块分类，需要特殊处理
         if (this.currentCategory === 'ae') {
             // 只渲染新增的AE应用
             const currentDisplayedApps = Array.from(appsGrid.children).length;
@@ -508,31 +512,20 @@ class AppStore {
                 return;
             }
             
-            // 使用DocumentFragment批量添加新卡片
-            const fragment = document.createDocumentFragment();
-
-            newAEApps.forEach(app => {
-                const appCard = document.createElement('div');
-                appCard.className = 'app-card';
-                appCard.dataset.appId = app.id;
-                appCard.innerHTML = `
-    <div class="app-content">
-        <img src="${app.icon}" alt="${app.name}" class="app-icon" onerror="this.src='https://via.placeholder.com/64x64/CCCCCC/FFFFFF?text=ICON'">
-        <div class="app-info">
-            <div class="app-name">${app.name}</div>
-            <div class="app-description">${app.description}</div>
-        </div>
-    </div>
-    <div class="app-footer">
-        <button class="download-btn" data-app-id="${app.id}">下载</button>
-    </div>
-`;
-
-                fragment.appendChild(appCard);
-            });
-
-            // 使用更平滑的添加方式
-            appsGrid.appendChild(fragment);
+            this.renderAppCards(newAEApps, appsGrid);
+        } else if (this.currentCategory === 'xp') {
+            // 只渲染新增的XP应用
+            const currentDisplayedApps = Array.from(appsGrid.children).length;
+            const newXPApps = this.appsData
+                .filter(app => app.category === 'XP模块')
+                .slice(currentDisplayedApps);
+            
+            if (newXPApps.length === 0) {
+                this.updateLoadMoreButton();
+                return;
+            }
+            
+            this.renderAppCards(newXPApps, appsGrid);
         } else {
             // 全部分类的正常逻辑
             const startIndex = (this.currentPage - 1) * this.appsPerPage;
@@ -543,31 +536,7 @@ class AppStore {
                 return;
             }
 
-            // 使用DocumentFragment批量添加新卡片
-            const fragment = document.createDocumentFragment();
-
-            appsToAdd.forEach(app => {
-                const appCard = document.createElement('div');
-                appCard.className = 'app-card';
-                appCard.dataset.appId = app.id;
-                appCard.innerHTML = `
-    <div class="app-content">
-        <img src="${app.icon}" alt="${app.name}" class="app-icon" onerror="this.src='https://via.placeholder.com/64x64/CCCCCC/FFFFFF?text=ICON'">
-        <div class="app-info">
-            <div class="app-name">${app.name}</div>
-            <div class="app-description">${app.description}</div>
-        </div>
-    </div>
-    <div class="app-footer">
-        <button class="download-btn" data-app-id="${app.id}">下载</button>
-    </div>
-`;
-
-                fragment.appendChild(appCard);
-            });
-
-            // 使用更平滑的添加方式
-            appsGrid.appendChild(fragment);
+            this.renderAppCards(appsToAdd, appsGrid);
         }
 
         // 绑定新添加的应用事件
@@ -596,6 +565,13 @@ class AppStore {
             
             // 只有当已加载的AE应用数量大于已显示的数量时，才显示"加载更多"
             shouldShow = loadedAECount > displayedAECount && this.hasMorePages;
+        } else if (this.currentCategory === 'xp') {
+            // XP模块分类：检查是否还有未加载的XP应用
+            const loadedXPCount = this.appsData.filter(app => app.category === 'XP模块').length;
+            const displayedXPCount = this.filteredApps.filter(app => app.category === 'XP模块').length;
+            
+            // 只有当已加载的XP应用数量大于已显示的数量时，才显示"加载更多"
+            shouldShow = loadedXPCount > displayedXPCount && this.hasMorePages;
         }
         
         if (shouldShow) {
@@ -613,6 +589,34 @@ class AppStore {
                 loadMoreBtn.style.opacity = '1';
             }, 300);
         }
+    }
+
+    // 渲染应用卡片的辅助函数
+    renderAppCards(apps, container) {
+        const fragment = document.createDocumentFragment();
+
+        apps.forEach(app => {
+            const appCard = document.createElement('div');
+            appCard.className = 'app-card';
+            appCard.dataset.appId = app.id;
+            appCard.innerHTML = `
+    <div class="app-content">
+        <img src="${app.icon}" alt="${app.name}" class="app-icon" onerror="this.src='https://via.placeholder.com/64x64/CCCCCC/FFFFFF?text=ICON'">
+        <div class="app-info">
+            <div class="app-name">${app.name}</div>
+            <div class="app-description">${app.description}</div>
+        </div>
+    </div>
+    <div class="app-footer">
+        <button class="download-btn" data-app-id="${app.id}">下载</button>
+    </div>
+`;
+
+            fragment.appendChild(appCard);
+        });
+
+        // 使用更平滑的添加方式
+        container.appendChild(fragment);
     }
 
     // 生成星级评分
@@ -727,8 +731,9 @@ class AppStore {
             loadMoreBtn.textContent = '加载中...';
         }
         
-        // 记录当前AE应用数量，用于后续筛选
+        // 记录当前各分类应用数量，用于后续筛选
         const currentAECount = this.appsData.filter(app => app.category === 'AE工程').length;
+        const currentXPCount = this.appsData.filter(app => app.category === 'XP模块').length;
         
         // 加载下一页数据 - 使用false表示不清空现有数据
         await this.loadAppsFromAPI(false);
@@ -743,6 +748,20 @@ class AppStore {
             } else {
                 // 没有新AE应用，尝试加载下一页
                 console.log('当前页面没有AE工程应用，将尝试加载下一页...');
+                
+                // 如果没有更多页面，确保按钮正确隐藏
+                this.updateLoadMoreButton();
+            }
+        } else if (this.currentCategory === 'xp') {
+            // 如果是XP模块分类，检查是否有新的XP应用
+            const newXPCount = this.appsData.filter(app => app.category === 'XP模块').length;
+            
+            if (newXPCount > currentXPCount) {
+                // 有新XP应用，重新筛选显示
+                this.filterAppsByCategory();
+            } else {
+                // 没有新XP应用，尝试加载下一页
+                console.log('当前页面没有XP模块应用，将尝试加载下一页...');
                 
                 // 如果没有更多页面，确保按钮正确隐藏
                 this.updateLoadMoreButton();
