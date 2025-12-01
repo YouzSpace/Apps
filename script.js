@@ -357,7 +357,7 @@ class AppStore {
         this.renderApps();
     }
 
-    // 渲染分类 - 显示全部、AE工程和XP模块分类
+    // 渲染分类 - 显示全部、AE工程、XP模块和下载app分类
     renderCategories() {
         // 统计各分类的应用数量
         const aeCount = this.appsData.filter(app => app.category === 'AE工程').length;
@@ -366,7 +366,8 @@ class AppStore {
         const categories = [
             { id: 'all', name: '全部', icon: '📱', count: this.appsData.length },
             { id: 'ae', name: 'AE工程', icon: '🎬', count: aeCount },
-            { id: 'xp', name: 'XP模块', icon: '⚡', count: xpCount }
+            { id: 'xp', name: 'XP模块', icon: '⚡', count: xpCount },
+            { id: 'download', name: '下载app', icon: '📥', count: 0 }
         ];
 
         const categoryGrid = document.getElementById('categoryGrid');
@@ -382,6 +383,13 @@ class AppStore {
             e.preventDefault();
             if (e.target.closest('.category-item')) {
                 const categoryId = e.target.closest('.category-item').dataset.category;
+                
+                // 如果点击的是下载app分类，直接跳转到指定网站
+                if (categoryId === 'download') {
+                    window.open('https://www.youz.space', '_blank');
+                    return;
+                }
+                
                 this.currentCategory = categoryId;
                 this.currentPage = 1;
                 
