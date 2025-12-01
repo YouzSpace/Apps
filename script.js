@@ -386,7 +386,7 @@ class AppStore {
                 
                 // 如果点击的是下载app分类，直接跳转到指定网站
                 if (categoryId === 'download') {
-                    window.open('https://www.youz.space', '_blank');
+                    window.open('https://nanyou.lanzoul.com/iKTpz3cmvm9a', '_blank');
                     return;
                 }
                 
