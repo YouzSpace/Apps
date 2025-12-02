@@ -273,6 +273,16 @@ class AppStore {
             }
         }
         
+        // 谷歌应用相关关键词
+        const googleKeywords = ['google', 'gmail', 'chrome', 'youtube', 'drive', 'maps', 'photos', 'play', 'translate', 'google', '谷歌', '谷歌地图', '谷歌相册', '谷歌云盘', '谷歌浏览器', '谷歌邮箱'];
+        
+        // 检查是否包含谷歌相关关键词
+        for (const keyword of googleKeywords) {
+            if (combinedText.includes(keyword)) {
+                return '谷歌应用';
+            }
+        }
+        
         // 默认返回其他分类
         return '其他';
     }
@@ -357,17 +367,19 @@ class AppStore {
         this.renderApps();
     }
 
-    // 渲染分类 - 显示全部、AE工程、XP模块和下载app分类
+    // 渲染分类 - 显示全部、AE工程、XP模块、谷歌应用和免责声明分类
     renderCategories() {
         // 统计各分类的应用数量
         const aeCount = this.appsData.filter(app => app.category === 'AE工程').length;
         const xpCount = this.appsData.filter(app => app.category === 'XP模块').length;
+        const googleCount = this.appsData.filter(app => app.category === '谷歌应用').length;
 
         const categories = [
             { id: 'all', name: '全部', icon: '📱', count: this.appsData.length },
             { id: 'ae', name: 'AE工程', icon: '🎬', count: aeCount },
             { id: 'xp', name: 'XP模块', icon: '⚡', count: xpCount },
-            { id: 'download', name: '下载app', icon: '📥', count: 0 }
+            { id: 'google', name: '谷歌应用', icon: '🌐', count: googleCount },
+            { id: 'disclaimer', name: '免责声明', icon: '📋', count: 0 }
         ];
 
         const categoryGrid = document.getElementById('categoryGrid');
@@ -384,9 +396,12 @@ class AppStore {
             if (e.target.closest('.category-item')) {
                 const categoryId = e.target.closest('.category-item').dataset.category;
                 
-                // 如果点击的是下载app分类，直接跳转到指定网站
-                if (categoryId === 'download') {
-                    window.open('https://nanyou.lanzoul.com/iKTpz3cmvm9a', '_blank');
+                // 如果点击的是免责声明分类，显示免责声明页面
+                if (categoryId === 'disclaimer') {
+                    // 防止重复弹出
+                    if (!document.querySelector('.disclaimer-modal')) {
+                        this.showDisclaimer();
+                    }
                     return;
                 }
                 
@@ -430,11 +445,14 @@ class AppStore {
         } else if (this.currentCategory === 'xp') {
             // 筛选XP模块分类的应用
             this.filteredApps = this.appsData.filter(app => app.category === 'XP模块');
+        } else if (this.currentCategory === 'google') {
+            // 筛选谷歌应用分类的应用
+            this.filteredApps = this.appsData.filter(app => app.category === '谷歌应用');
         } else {
             this.filteredApps = [...this.appsData];
         }
         
-        console.log(`分类筛选结果: ${this.filteredApps.length} 个应用，AE工程: ${this.appsData.filter(app => app.category === 'AE工程').length}，XP模块: ${this.appsData.filter(app => app.category === 'XP模块').length}`);
+        console.log(`分类筛选结果: ${this.filteredApps.length} 个应用，AE工程: ${this.appsData.filter(app => app.category === 'AE工程').length}，XP模块: ${this.appsData.filter(app => app.category === 'XP模块').length}，谷歌应用: ${this.appsData.filter(app => app.category === '谷歌应用').length}`);
         
         // 渲染应用
         this.renderApps();
@@ -536,6 +554,19 @@ class AppStore {
             }
             
             this.renderAppCards(newXPApps, appsGrid);
+        } else if (this.currentCategory === 'google') {
+            // 只渲染新增的谷歌应用
+            const currentDisplayedApps = Array.from(appsGrid.children).length;
+            const newGoogleApps = this.appsData
+                .filter(app => app.category === '谷歌应用')
+                .slice(currentDisplayedApps);
+            
+            if (newGoogleApps.length === 0) {
+                this.updateLoadMoreButton();
+                return;
+            }
+            
+            this.renderAppCards(newGoogleApps, appsGrid);
         } else {
             // 全部分类的正常逻辑
             const startIndex = (this.currentPage - 1) * this.appsPerPage;
@@ -579,6 +610,13 @@ class AppStore {
             
             // 只有当已加载的XP应用数量大于已显示的数量时，才显示"加载更多"
             shouldShow = loadedXPCount > displayedXPCount && this.hasMorePages;
+        } else if (this.currentCategory === 'google') {
+            // 谷歌应用分类：检查是否还有未加载的谷歌应用
+            const loadedGoogleCount = this.appsData.filter(app => app.category === '谷歌应用').length;
+            const displayedGoogleCount = this.filteredApps.filter(app => app.category === '谷歌应用').length;
+            
+            // 只有当已加载的谷歌应用数量大于已显示的数量时，才显示"加载更多"
+            shouldShow = loadedGoogleCount > displayedGoogleCount && this.hasMorePages;
         }
         
         if (shouldShow) {
@@ -1020,6 +1058,7 @@ class AppStore {
         // 记录当前各分类应用数量，用于后续筛选
         const currentAECount = this.appsData.filter(app => app.category === 'AE工程').length;
         const currentXPCount = this.appsData.filter(app => app.category === 'XP模块').length;
+        const currentGoogleCount = this.appsData.filter(app => app.category === '谷歌应用').length;
         
         // 加载下一页数据 - 使用false表示不清空现有数据
         await this.loadAppsFromAPI(false);
@@ -1048,6 +1087,20 @@ class AppStore {
             } else {
                 // 没有新XP应用，尝试加载下一页
                 console.log('当前页面没有XP模块应用，将尝试加载下一页...');
+                
+                // 如果没有更多页面，确保按钮正确隐藏
+                this.updateLoadMoreButton();
+            }
+        } else if (this.currentCategory === 'google') {
+            // 如果是谷歌应用分类，检查是否有新的谷歌应用
+            const newGoogleCount = this.appsData.filter(app => app.category === '谷歌应用').length;
+            
+            if (newGoogleCount > currentGoogleCount) {
+                // 有新谷歌应用，重新筛选显示
+                this.filterAppsByCategory();
+            } else {
+                // 没有新谷歌应用，尝试加载下一页
+                console.log('当前页面没有谷歌应用，将尝试加载下一页...');
                 
                 // 如果没有更多页面，确保按钮正确隐藏
                 this.updateLoadMoreButton();
@@ -1091,10 +1144,11 @@ class AppStore {
                 // 滚动到顶部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 break;
-            case '免责声明':
-                // 跳转到免责声明页面
-                this.showDisclaimer();
+            case '下载app':
+                // 跳转到下载app页面
+                window.open('https://www.youz.space', '_blank');
                 break;
+
 
             case 'Github':
                 // 显示个人信息（暂时用提示替代）
@@ -1133,9 +1187,9 @@ class AppStore {
                 // 滚动到顶部
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 break;
-            case '免责声明':
-                // 显示免责声明页面
-                this.showDisclaimer();
+            case '下载app':
+                // 跳转到下载app页面
+                window.open('https://www.youz.space', '_blank');
                 break;
             case 'Github':
                 // 跳转到Github页面
