@@ -1146,7 +1146,7 @@ class AppStore {
                 break;
             case '下载app':
                 // 跳转到下载app页面
-                window.open('https://www.youz.space', '_blank');
+                window.open('https://store.youz.space//view.php?id=930653', '_blank');
                 break;
 
 
@@ -1189,7 +1189,7 @@ class AppStore {
                 break;
             case '下载app':
                 // 跳转到下载app页面
-                window.open('https://www.youz.space', '_blank');
+                window.open('https://store.youz.space//view.php?id=930653', '_blank');
                 break;
             case 'Github':
                 // 跳转到Github页面
