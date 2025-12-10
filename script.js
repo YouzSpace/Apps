@@ -728,6 +728,89 @@ class AppStore {
         this.showDownloadWebsite(app);
     }
 
+    // 获取GitHub最新版本并下载
+    async getLatestReleaseAndDownload() {
+        try {
+            // 显示加载提示
+            this.showDownloadToast('正在获取最新版本...');
+            
+            // 调用GitHub API获取最新release信息
+            const response = await fetch('https://api.github.com/repos/YouzSpace/Apps/releases/latest', {
+                headers: {
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`获取版本信息失败: ${response.status}`);
+            }
+            
+            const releaseData = await response.json();
+            
+            // 调试信息
+            console.log('Release数据:', releaseData);
+            console.log('可用文件:', releaseData.assets?.map(asset => ({ name: asset.name, size: asset.size })));
+            
+            // 查找第一个可下载的文件（优先查找.apk文件）
+            const downloadAsset = releaseData.assets.find(asset => 
+                asset.name.toLowerCase().endsWith('.apk')
+            ) || releaseData.assets.find(asset => 
+                asset.name.toLowerCase().includes('android')
+            ) || releaseData.assets[0]; // 如果都没找到，使用第一个文件
+            
+            if (downloadAsset) {
+                // 找到APK文件，开始下载
+                await this.downloadFile(downloadAsset.browser_download_url, downloadAsset.name);
+            } else {
+                // 如果没有找到APK，直接跳转到releases页面
+                window.open('https://github.com/YouzSpace/Apps/releases/latest', '_blank');
+                this.showDownloadToast('未找到下载文件，已打开版本页面');
+            }
+            
+        } catch (error) {
+            console.error('获取最新版本失败:', error);
+            // 失败时跳转到releases页面
+            window.open('https://github.com/YouzSpace/Apps/releases/latest', '_blank');
+            this.showDownloadToast('获取版本失败，已打开下载页面');
+        }
+    }
+
+    // 下载文件功能
+    async downloadFile(url, filename) {
+        try {
+            // 显示简单提示
+            this.showDownloadToast(`开始下载 ${filename}`);
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = filename;
+            downloadLink.target = '_blank';
+            downloadLink.style.display = 'none';
+            
+            // 添加到页面并触发下载
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            
+            // 清理链接元素
+            setTimeout(() => {
+                if (downloadLink.parentNode) {
+                    document.body.removeChild(downloadLink);
+                }
+            }, 100);
+            
+        } catch (error) {
+            console.error('下载失败:', error);
+            this.showDownloadToast('下载失败，正在打开下载页面...');
+            
+            // 备用方案：跳转到releases页面
+            setTimeout(() => {
+                window.open('https://github.com/YouzSpace/Apps/releases/latest', '_blank');
+            }, 2000);
+        }
+    }
+
+
+
     // 显示下载提示
     showDownloadToast(appName) {
         // 创建提示元素
@@ -736,7 +819,7 @@ class AppStore {
         toast.innerHTML = `
             <div class="toast-content">
                 <span class="toast-icon">⬇️</span>
-                <span class="toast-text">正在准备下载 ${appName}</span>
+                <span class="toast-text">${appName}</span>
             </div>
         `;
 
@@ -1145,14 +1228,14 @@ class AppStore {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 break;
             case '下载app':
-                // 跳转到下载app页面
-                window.open('https://store.youz.space//view.php?id=930653', '_blank');
+                // 自动获取最新版本并下载
+                this.getLatestReleaseAndDownload();
                 break;
 
 
             case 'Github':
-                // 显示个人信息（暂时用提示替代）
-                window.location.href = 'https://github.com/YouzSpace/apps';
+                // 跳转到Github页面
+                window.open('https://github.com/YouzSpace/Apps', '_blank');
                 break;
         }
     }
@@ -1188,12 +1271,12 @@ class AppStore {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 break;
             case '下载app':
-                // 跳转到下载app页面
-                window.open('https://store.youz.space//view.php?id=930653', '_blank');
+                // 自动获取最新版本并下载
+                this.getLatestReleaseAndDownload();
                 break;
             case 'Github':
                 // 跳转到Github页面
-                window.open('https://github.com/YouzSpace/apps', '_blank');
+                window.open('https://github.com/YouzSpace/Apps', '_blank');
                 break;
         }
     }
