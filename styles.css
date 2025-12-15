@@ -714,6 +714,15 @@ body {
     .app-card:hover {
         border-color: var(--primary-color);
     }
+    
+    /* 电脑端保留分类项目边框 */
+    .category-item {
+        border: 1px solid var(--border-color);
+    }
+    
+    .category-item:hover {
+        border-color: var(--primary-color);
+    }
 }
 
 /* 桌面端适配 */
@@ -1056,6 +1065,15 @@ body {
   
   /* 移动端去除应用卡片hover边框 */
   .app-card:hover {
+    border: none;
+  }
+  
+  /* 移动端去除分类项目边框 */
+  .category-item {
+    border: none;
+  }
+  
+  .category-item:hover {
     border: none;
   }
 }
