@@ -412,7 +412,7 @@ body {
 
 .app-card {
     background: linear-gradient(135deg, var(--surface) 0%, #fafbfc 30%, var(--surface-alt) 100%);
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
     transition: all 0.3s ease;
@@ -428,7 +428,6 @@ body {
     background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 30%, #d8e7ff 100%);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(66, 133, 244, 0.15);
-    border-color: var(--primary-color);
 }
 
 .app-content {
@@ -709,6 +708,11 @@ body {
     
     .app-card {
         justify-content: flex-start;
+        border: 1px solid var(--border-color);
+    }
+    
+    .app-card:hover {
+        border-color: var(--primary-color);
     }
 }
 
@@ -982,6 +986,7 @@ body {
   /* 应用卡片内边距 */
   .app-card {
     padding: var(--spacing-md);
+    border: none;
   }
   
   /* 应用图标大小 */
@@ -1047,5 +1052,10 @@ body {
   /* 主内容区底部留白 */
   .main-content {
     padding-bottom: 65px;
+  }
+  
+  /* 移动端去除应用卡片hover边框 */
+  .app-card:hover {
+    border: none;
   }
 }
