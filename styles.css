@@ -942,110 +942,110 @@ body {
 
 /* 移动端缩小显示调整 */
 @media (max-width: 767px) {
-  /* 减小间距 */
+  /* 调整间距 - 适中的大小 */
   :root {
-    --spacing-xs: 0.18rem;
-    --spacing-sm: 0.35rem;
-    --spacing-md: 0.7rem;
-    --spacing-lg: 1rem;
-    --spacing-xl: 1.4rem;
-    --spacing-2xl: 2rem;
+    --spacing-xs: 0.22rem;
+    --spacing-sm: 0.4rem;
+    --spacing-md: 0.8rem;
+    --spacing-lg: 1.2rem;
+    --spacing-xl: 1.6rem;
+    --spacing-2xl: 2.3rem;
     
-    /* 减小字体大小 */
-    --text-xs: 0.6rem;
-    --text-sm: 0.7rem;
-    --text-base: 0.85rem;
-    --text-lg: 0.95rem;
-    --text-xl: 1.05rem;
-    --text-2xl: 1.25rem;
-    --text-3xl: 1.5rem;
-    --text-4xl: 1.8rem;
+    /* 调整字体大小 - 适中的大小 */
+    --text-xs: 0.65rem;
+    --text-sm: 0.75rem;
+    --text-base: 0.9rem;
+    --text-lg: 1rem;
+    --text-xl: 1.1rem;
+    --text-2xl: 1.3rem;
+    --text-3xl: 1.6rem;
+    --text-4xl: 1.9rem;
   }
   
-  /* 减小容器最大宽度 */
+  /* 容器宽度 */
   .container {
-    max-width: 94%;
+    max-width: 95%;
     padding: 0 var(--spacing-sm);
   }
   
-  /* 减小标题大小 */
+  /* 标题大小 */
   .hero-title {
     font-size: var(--text-2xl);
   }
   
-  /* 减小英雄区域的内边距 */
+  /* 英雄区域内边距 */
   .hero-section {
     padding: var(--spacing-xl) 0;
     margin-bottom: var(--spacing-lg);
   }
   
-  /* 减小应用卡片内边距 */
+  /* 应用卡片内边距 */
   .app-card {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md);
   }
   
-  /* 减小应用图标大小 */
+  /* 应用图标大小 */
   .app-icon {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
   
-  /* 减小分类图标大小 */
+  /* 分类图标大小 */
   .category-icon {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
   
-  /* 减小搜索框高度 */
+  /* 搜索框高度 */
   .search-input {
-    padding: 0.5rem var(--spacing-md);
+    padding: 0.6rem var(--spacing-lg);
     font-size: var(--text-sm);
   }
   
-  /* 减小导航栏内边距 */
+  /* 导航栏内边距 */
   .header-content {
-    padding: var(--spacing-xs) 0;
+    padding: var(--spacing-sm) 0;
   }
   
-  /* 减小底部导航高度 */
+  /* 底部导航高度 */
   .mobile-footer {
-    height: 60px;
+    height: 65px;
   }
   
   .footer-nav {
-    padding: 0.2rem 0;
+    padding: 0.3rem 0;
   }
   
-  /* 减小底部导航图标 */
+  /* 底部导航图标 */
   .footer-nav-item svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
   
-  /* 减小分类网格间距 */
+  /* 分类网格间距 */
   .category-grid {
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
   }
   
-  /* 减小应用网格间距 */
+  /* 应用网格间距 */
   .apps-grid {
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
   }
   
-  /* 减小加载更多按钮内边距 */
+  /* 加载更多按钮内边距 */
   .load-more-btn {
-    padding: var(--spacing-xs) var(--spacing-md);
-    font-size: var(--text-xs);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--text-sm);
   }
   
-  /* 减小分类项目内边距 */
+  /* 分类项目内边距 */
   .category-item {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-sm);
   }
   
-  /* 减小主内容区底部留白 */
+  /* 主内容区底部留白 */
   .main-content {
-    padding-bottom: 60px;
+    padding-bottom: 65px;
   }
 }
