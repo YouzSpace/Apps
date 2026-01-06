@@ -727,6 +727,42 @@ body {
 
 /* 桌面端适配 */
 @media (min-width: 1024px) {
+    /* PC端背景色设置 - 匹配提供的背景图片效果 */
+    body {
+        background: 
+            radial-gradient(circle at 25% 25%, rgba(173, 216, 230, 0.7) 0%, transparent 60%),
+            radial-gradient(circle at 70% 35%, rgba(152, 251, 152, 0.5) 0%, transparent 60%),
+            radial-gradient(circle at 50% 80%, rgba(255, 250, 205, 0.6) 0%, transparent 60%),
+            radial-gradient(circle at 10% 60%, rgba(255, 228, 196, 0.4) 0%, transparent 50%),
+            linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+        background-size: 100% 100%;
+        background-attachment: fixed;
+    }
+    
+    /* 导航栏背景样式 - 匹配页面背景 */
+    .header {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* 毛玻璃效果 - 卡片元素（匹配提供的参考图效果） */
+    .category-item,
+    .featured-app,
+    .app-card {
+        /* 调整半透明背景色，更接近参考图 */
+        background: rgba(255, 255, 255, 0.6);
+        /* 增强背景模糊效果 */
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        /* 更柔和的边框阴影 */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        /* 更清晰的边框，增强玻璃质感 */
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        /* 保持圆角效果 */
+        border-radius: var(--radius-lg);
+    }
+    
     .category-grid {
         grid-template-columns: repeat(6, 1fr);
     }
